@@ -8,7 +8,7 @@ class Game:
         self.attempt = 0
         self._bulls_name = 'быки'
         self._cows_name = 'коровы'
-        self.bulls_cows = {self._cows_name: [], self._bulls_name: []}
+        self.bulls_cows = {self._cows_name: set(), self._bulls_name: set()}
 
     def game_menu(self):
         """
@@ -31,7 +31,7 @@ class Game:
         """
         self.new_number()
         self.attempt = 0
-        self.bulls_cows = {self._cows_name: [], self._bulls_name: []}
+        self.bulls_cows = {self._cows_name: set(), self._bulls_name: set()}
 
         print('Угадай 4-х значное число из неповторяющихся цифр! Удачи!')
         while True:
@@ -77,12 +77,14 @@ class Game:
         for n_pc, i_pc in enumerate(self.number):
             for n_usr, i_usr in enumerate(self.user_number):
                 if i_pc == i_usr and n_pc == n_usr:  # определение быка
-                    self.bulls_cows[self._bulls_name].append(i_usr)
+                    self.bulls_cows[self._bulls_name].add(i_usr)
+                    if i_usr in self.bulls_cows[self._cows_name]:
+                        self.bulls_cows[self._cows_name].remove(i_usr)
                     break
                 elif i_pc == i_usr:  # определение коровы
-                    self.bulls_cows[self._cows_name].append(i_usr)
+                    self.bulls_cows[self._cows_name].add(i_usr)
                     break
-                else:                # отсутствие совпадений
+                else:  # отсутствие совпадений
                     pass
 
     def print_results(self):
@@ -113,6 +115,4 @@ if __name__ == '__main__':
 
 
     # Сделать фичу - выбор длины числа
-    # При старте игры обнулять все хранимые значения (number, user_number, attempts, bulls_cows)
-    # Переделать списки bulls_cows на сеты, чтобы избежать дублирования цифр
-    # исправить баг с необнулением и дублированием коров и быков
+    # исправить баг с необнулением коров при переходе в быки

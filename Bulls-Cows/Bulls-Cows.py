@@ -10,12 +10,35 @@ class Game:
         self._cows_name = 'коровы'
         self.bulls_cows = {self._cows_name: [], self._bulls_name: []}
 
+    def game_menu(self):
+        """
+        Запускает игру и управляет ее ходом
+        """
+        answer = input('Сыграем в "Быки и коровы"? (y/n): ')
+        while True:
+            if answer == 'y':
+                self.start_game()
+                answer = input('Еще разок"? (y/n): ')
+            elif answer == 'n':
+                print('До свидания!')
+                break
+            else:
+                answer = input('Непонятная команда! Введи "y" для старта или "n" для выхода: ')
+
     def start_game(self):
         """
-        Запускает игру
-        :return:
+        Управляет одним коном игры
         """
-        pass
+        self.new_number()
+        self.attempt = 0
+        self.bulls_cows = {self._cows_name: [], self._bulls_name: []}
+
+        print('Угадай 4-х значное число из неповторяющихся цифр! Удачи!')
+        while True:
+            self.attempt += 1
+            self.get_user_number()
+            if self.compare() == 'end':
+                break
 
     def new_number(self):
         """
@@ -34,16 +57,15 @@ class Game:
         """
         user_input = input('Введите число (4 знака): ')
         self.user_number = [i for i in user_input]
-        print(self.user_number)
 
     def compare(self):
         """
         Сравнивает угадываемое число с числом, предложенным пользователем
-        :return:
+        :return: 'end' если игра окончена
         """
         if ''.join(self.number) == ''.join(self.user_number):
             print('Победа! Вы справились за {} попыток'.format(self.attempt))
-            return
+            return 'end'
         else:
             self.get_bulls_cows()
         self.print_results()
@@ -62,7 +84,6 @@ class Game:
                     break
                 else:                # отсутствие совпадений
                     pass
-        print(self.bulls_cows)
 
     def print_results(self):
         """
@@ -75,7 +96,7 @@ class Game:
 
 if __name__ == '__main__':
     my_game = Game()
-    my_game.start_game()
+    my_game.game_menu()
 
     # Ниже код для тестирования
 
@@ -84,12 +105,14 @@ if __name__ == '__main__':
     # my_game.compare()
     # my_game.get_user_number()
 
-    my_game.number = ['1', '2', '3', '4']
-    my_game.user_number = ['5', '2', '6', '4']
-    my_game.get_bulls_cows()
-    my_game.print_results()
+    # my_game.number = ['1', '2', '3', '4']
+    # my_game.user_number = ['5', '2', '6', '4']
+    # my_game.get_bulls_cows()
+    # my_game.print_results()
 
 
 
     # Сделать фичу - выбор длины числа
     # При старте игры обнулять все хранимые значения (number, user_number, attempts, bulls_cows)
+    # Переделать списки bulls_cows на сеты, чтобы избежать дублирования цифр
+    # исправить баг с необнулением и дублированием коров и быков

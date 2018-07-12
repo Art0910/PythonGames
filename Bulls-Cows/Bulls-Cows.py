@@ -6,7 +6,9 @@ class Game:
         self.number = []
         self.user_number = []
         self.attempt = 0
-        self.bulls_cows = {'коровы': [], 'быки': []}
+        self._bulls_name = 'быки'
+        self._cows_name = 'коровы'
+        self.bulls_cows = {self._cows_name: [], self._bulls_name: []}
 
     def start_game(self):
         """
@@ -40,9 +42,11 @@ class Game:
         :return:
         """
         if ''.join(self.number) == ''.join(self.user_number):
-            print ('Победа! Вы справились за {} попыток'.format(self.attempt))
+            print('Победа! Вы справились за {} попыток'.format(self.attempt))
+            return
         else:
             self.get_bulls_cows()
+        self.print_results()
 
     def get_bulls_cows(self):
         """
@@ -51,14 +55,23 @@ class Game:
         for n_pc, i_pc in enumerate(self.number):
             for n_usr, i_usr in enumerate(self.user_number):
                 if i_pc == i_usr and n_pc == n_usr:  # определение быка
-                    self.bulls_cows['быки'].append(i_usr)
+                    self.bulls_cows[self._bulls_name].append(i_usr)
                     break
                 elif i_pc == i_usr:  # определение коровы
-                    self.bulls_cows['коровы'].append(i_usr)
+                    self.bulls_cows[self._cows_name].append(i_usr)
                     break
                 else:                # отсутствие совпадений
                     pass
         print(self.bulls_cows)
+
+    def print_results(self):
+        """
+        В красивом виде выводит число пользователя, набор быков и коров
+        """
+        cows = ', '.join(self.bulls_cows[self._cows_name]) if self.bulls_cows[self._cows_name] else '-'
+        bulls = ', '.join(self.bulls_cows[self._bulls_name]) if self.bulls_cows[self._bulls_name] else '-'
+        print('{} --> {}: {}; {}: {}'.format(''.join(self.user_number), self._cows_name, cows, self._bulls_name, bulls))
+
 
 if __name__ == '__main__':
     my_game = Game()
@@ -71,9 +84,10 @@ if __name__ == '__main__':
     # my_game.compare()
     # my_game.get_user_number()
 
-    my_game.number = [1, 2, 3, 4]
-    my_game.user_number = [3, 2, 6, 4]
+    my_game.number = ['1', '2', '3', '4']
+    my_game.user_number = ['5', '2', '6', '4']
     my_game.get_bulls_cows()
+    my_game.print_results()
 
 
 
